@@ -1,0 +1,18 @@
+{% if state1 and data1 %}
+    I hear you, {{ state1 }}!!
+    I hear you, {{ state2 }}!!
+    I hear you, {{ state3 }}!!
+    I hear you, {{ data1 }}!!
+    I hear you, {{ data2 }}!!
+    I hear you, {{ data3 }}!!
+{% endif %}
+
+<form action="{{ form_action }}"
+      method="{{ form_method }}">
+  {% if form_method == "post" %}
+    {% csrf_token %}
+  {% endif %}
+  {{ form.as_p }}
+</form>
+
+{{plot_source | safe}}
