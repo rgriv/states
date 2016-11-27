@@ -1,12 +1,17 @@
-{% if state1 and data1 %}
-    I hear you, {{ state1 }}!!
-    I hear you, {{ state2 }}!!
-    I hear you, {{ state3 }}!!
-    I hear you, {{ data1 }}!!
-    I hear you, {{ data2 }}!!
-    I hear you, {{ data3 }}!!
-{% endif %}
+<style>
+#left {
+  float: left;
+  width: 35%;
+  overflow: hidden;
+}
 
+#right {
+  overflow: hidden;
+}
+</style>
+
+<div id = "wrapper">
+<div id = "left">
 <form action="{{ form_action }}"
       method="{{ form_method }}">
   {% if form_method == "post" %}
@@ -14,5 +19,8 @@
   {% endif %}
   {{ form.as_p }}
 </form>
-
+</div>
+<div id = "right">
+<a href="{% url 'myapp:form' %}">Click here</a>
 {{plot_source | safe}}
+</div>

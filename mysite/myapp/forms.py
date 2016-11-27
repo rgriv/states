@@ -8,13 +8,13 @@ class InputForm(forms.ModelForm):
 
     state1 = forms.ChoiceField(choices=STATES, required=True,
                               widget=forms.Select(attrs = attrs))
-    state2 = forms.ChoiceField(choices=STATES, required=True,
-                              widget=forms.Select(attrs = attrs))
-    state3 = forms.ChoiceField(choices=STATES, required=True,
-                              widget=forms.Select(attrs = attrs))
     data1 = forms.ChoiceField(choices=DATA, required=True,
                               widget=forms.Select(attrs = attrs))
+    state2 = forms.ChoiceField(choices=STATES, required=True,
+                              widget=forms.Select(attrs = attrs))
     data2 = forms.ChoiceField(choices=DATA, required=True,
+                              widget=forms.Select(attrs = attrs))
+    state3 = forms.ChoiceField(choices=STATES, required=True,
                               widget=forms.Select(attrs = attrs))
     data3 = forms.ChoiceField(choices=DATA, required=True,
                               widget=forms.Select(attrs = attrs))
@@ -23,4 +23,4 @@ class InputForm(forms.ModelForm):
 
     class Meta:
         model = Input
-        fields = ['state1', 'state2', 'state3', 'data1', 'data2', 'data3']
+        fields = ['state1', 'data1', 'state2', 'data2', 'state3', 'data3']

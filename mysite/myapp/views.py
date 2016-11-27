@@ -72,29 +72,20 @@ def make_plot(s1 = "None", s2 = "None", s3 = "None", d1 = "None", d2 = "None", d
     #return "<p>howdy</p>"
 
 def form(request):
-    # year = request.GET.get('year', '2016')
+    #start_year = request.Get.get('start_year', 'None')
+    #end_year = request.Get.get('end_year', 'None')
     state1 = request.GET.get('state1', 'None')
-    state2 = request.GET.get('state2', 'None')
-    state3 = request.GET.get('state3', 'None')
     data1 = request.GET.get('data1', 'None')
+    state2 = request.GET.get('state2', 'None')
     data2 = request.GET.get('data2', 'None')
+    state3 = request.GET.get('state3', 'None')
     data3 = request.GET.get('data3', 'None')
-
-    # if not data1 and year1:
-    #     state1 = request.GET.get('state1', 'AL')
-    #     state2 = request.GET.get('state2', 'AK')
-    #     state3 = request.GET.get('state3', 'AZ')
-    #     data1 = request.GET.get('data1', 'Civilian Labor Force')
-    #     data2 = request.GET.get('data2', 'NA')
-    #     data3 = request.GET.get('data3', 'POP')
-    # if not state and year:
-    #     state = request.POST.get('state', 'PA')
-    #     year = request.POST.get('year', '2016')
 
     params = {'form_action' : reverse_lazy('myapp:form'),
               'form_method' : 'get',
-              'form' : InputForm({'state1' : state1, 'state2' : state2, 'state3' : state3,
-                                    'data1' : data1, 'data2' : data2, 'data3' : data3}),
+              'form' : InputForm({'state1' : state1, 'data1' : data1,
+                                    'state2' : state2, 'data2' : data2,
+                                    'state3' : state3, 'data3' : data3}),
             #   'state1' : STATES_DICT[state1],
             #   'state2' : STATES_DICT[state2],
             #   'state3' : STATES_DICT[state3],
