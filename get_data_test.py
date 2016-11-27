@@ -3,6 +3,7 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 import re
+import os
 
 quandl.ApiConfig.api_key = 'pzsR2vefkG2XPBZpVq3a'
 states = {
@@ -81,8 +82,10 @@ def getQuandlData(db, info, state_abv):
         print("No database with that name.")
     print(url)
     return quandl.get(url)
+
 def getTotalColumns(tr_list):
     return {tr_list[1] : [int(re.sub("[^0-9]", "", n)) for n in tr_list if "," in n or n.isdigit()]}
+
 def getCensusData(state):
     base_url = "http://censusviewer.com/state/"
     soup = BeautifulSoup(requests.get(base_url + state).content)
@@ -92,19 +95,47 @@ def getCensusData(state):
         t = getTotalColumns(i.text.split("\n"))
         if list(t.values()) != [[]]: data_dict.update(t)
     return pd.DataFrame(data_dict).transpose().rename(columns = {0 : "2010", 1 : "2000", 2 : "2000 - 2010 Change"})
-    # Total = getTotalColumns(soup.find("tr", attrs = {"class" : "data_body __total"}).text.split("\n"))
-    # Races = {}
-    # for race in soup.find_all("tr", attrs = {"class" : "data_body race"}):
-    #     Races.update(getTotalColumns(race.text.split("\n")))
-    # Latinos = {}
-    # for latino in soup.find_all("tr", attrs = {"class" : "data_body latino"}):
-    #     Latinos.update(getTotalColumns(latino.text.split("\n")))
-    # Genders = {}
-    # for gender in soup.find_all("tr", attrs = {"class" : "data_body gender"}):
-    #     Genders.update(getTotalColumns(gender.text.split("\n")))
-    # Ages = {}
-    # for age in soup.find_all("tr", attrs = {"class" : "data_body agemunge"}):
-    #     Ages.update(getTotalColumns(age.text.split("\n")))
+
+def getSpendingStateTypeData(state, data_type):
+    #data_types = ['bn', 'dn', 'pn']
+    year_dict = {}
+    for year in range(2000, 2016):
+        url = "http://www.usgovernmentspending.com/year_download_{}{}{}_18bc2n#usgs302".format(year, state, data_type)
+        soup = BeautifulSoup(requests.get(url).content)
+        soup =  soup.find_all("tr", attrs = {"class" : "tier"}) + soup.find_all("tr", attrs = {"class" : "tiere"})
+        data_dict = {}
+        for x in soup:
+            try:
+                x = list(x.children)
+                data_dict[x[1].text.replace(':\xa0 Start chart',"")] = float(x[-2].text.replace('\xa0', ""))
+            except: pass
+        year_dict[str(year)] = pd.Series(data_dict)
+    df = pd.DataFrame(year_dict).transpose()
+    df.index.name = "Date"
+    return(df)
+
+def getSpendingDataSets(data_type, folder):
+    for state in states.keys():
+        print(state)
+        getSpendingStateTypeData(state, data_type).to_csv("{}{}_{}{}".format(folder, data_type, state, ".csv"))
+
+getSpendingDataSets("pn", "Raw Spending/")
+getSpendingDataSets("bn", "Raw Spending/")
+getSpendingDataSets("dn", "Raw Spending/")
+
+def formatSpendingData(folder):
+    spending_types = ["Balance", "Education", "General Government",
+                    "Gross Public Debt", "Health Care", "Interest",
+                    "Other Borrowing", "Other Spending", "Pensions",
+                    "Protection", "Total Spending", "Transportation", "Welfare"]
+    for data_type in ["bn", "pn", "dn"]:
+        for st in spending_types:
+            df_list = []
+            for state, name in states.items():
+                df = pd.read_csv("{}{}_{}.csv".format(folder, data_type, state), usecols = ["Date", st], index_col = "Date")
+                df_list.append(df.rename(columns = {st : state}))
+            pd.concat(df_list, axis = 1).to_csv("{}_{}.csv".format(data_type, st))
+formatSpendingData("Raw Spending/")
 
 for db in data_dict:
     for info in data_dict[db]:
@@ -116,18 +147,3 @@ for db in data_dict:
         final_data = pd.concat(full_data, axis = 1);
         data.index = pd.DatetimeIndex(data.index).year
         final_data.to_csv(db + "_" + info + ".csv", encoding='utf-8');
-        #print(final_data);
-        #data = pd.concat([getData(db, info, state).rename(columns = {"Amount": state}) for state in states], axis = 1);
-
-#def get_panel(db_dict):
-    #for pre, post in db_dict["pre_post"]:
-        #print (getData(db_dict["db"], pre, post, db_dict["state"]))
-    #return pd.concat([getData(db_dict["db"], pre, post, db["state"]) for pre, post in db_dict["pre_post"]])
-
-
-# for abv, name in states.items:
-#     for data_suffix in data_suffixs[:1]:
-#         df = quandl.get(data_prefix + "/" + abv + data_suffix)
-#         df.ix[dt.datetime(2005, 1, 1) : dt.datetime(2015, 12, 31)]
-#         print(abv)
-#         print(df.index)
