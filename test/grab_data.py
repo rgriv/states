@@ -73,7 +73,7 @@ def slugify(value):
     value = re.sub('[^\w\s-]', '', value).strip().lower()
     value = re.sub('[-\s]+', '-', value)
     return value
-
+#
 # slice by data type
 def sliceByType(df):
     #figure out num of columns per state
@@ -155,6 +155,7 @@ def getCensusData(state):
             td_list = [td.text for td in i.find_all("td")]
             column = pd.DataFrame({state + ": " + td_list[0]: getColumnValues([td.text for td in i.find_all("td")])}, df_index)
             census = pd.concat([census, column], axis=1)
+            census.index.name = "Year"
 
         census_data[group] = census
 
