@@ -9,7 +9,7 @@ def index(request):
     return HttpResponse("Hello, world. You're at the State Data Viewing index.")
 
 from .display import InputForm
-from .models import STATES_DICT, YEARS_DICT, DATA_DICT, ID_DICT, DT_DICT
+from .models import STATES_DICT, YEARS_DICT, DATA_DICT, ID_DICT, DT_DICT, STATEFP_DICT
 import pandas as pd
 import os
 import mpld3
@@ -24,7 +24,8 @@ def make_plot(SD_list, start_year, end_year, display_type, intersect_data):
             dlist.append((pd.read_csv(join(settings.STATIC_ROOT, 'states/', "{}.csv".format(data)), usecols = ["Year", state], index_col = "Year")
                         .rename(columns = {state : "{} in {}".format(DATA_DICT[data], STATES_DICT[state])})))
     indexes = list(range(int(start_year), int(end_year) + 1))
-    if dlist != []:
+    if display_type == "map": pass
+    elif dlist != []:
         join_type = 'inner' if intersect_data == 'True' else 'outer'
         dlist = [d.ix[indexes] for d in dlist]
         df = pd.concat(dlist,
@@ -61,6 +62,43 @@ def make_plot(SD_list, start_year, end_year, display_type, intersect_data):
         table = table.replace('border="1"','border="0"')
         table = table.replace('style="text-align: right;"', "")
         return table
+
+    elif display_type == "map":
+        if SD_list[0][1] in ('None', ''): return "<p>Nothing to Map</p>"
+        data = SD_list[0][1]
+        df = pd.read_csv(join(settings.STATIC_ROOT,
+                            'states/', "{}.csv".format(data)),
+                            index_col = "Year")
+        df.columns = [int(STATEFP_DICT[st]) for st in df.columns.values]
+        del df.index.name
+        df = df.transpose()
+        df = df[[int(end_year)]]
+        df.columns = [DATA_DICT[data]]
+        try:
+            from shapely.affinity import translate, rotate, scale
+            import geopandas as gpd
+
+            filename = join(settings.STATIC_ROOT, 'states/cb_2015_us_state_20m.shp')
+
+            geo_df = gpd.read_file(filename)
+            geo_df.set_index(geo_df["STATEFP"].astype(int), inplace=True)
+
+            contiguous = (geo_df.index < 57)    ### only 50 states
+            geo_df = geo_df[contiguous]
+            geo_merge = geo_df.join(df, how="inner")
+
+            fig, ax = plt.subplots()
+
+            # try 2163 (albers), 3857 (web), 4269 (plate)
+            albers = geo_merge.to_crs(epsg=2163)
+            ## k=4 mean labels color is divided by 4.
+            ax = albers.plot(column=DATA_DICT[data], scheme="quantiles", k=4, cmap="PuOr", legend=True, alpha=0.4, linewidth=0.5, figsize=(12, 8))
+
+            ax.set_title(DATA_DICT[data], fontsize=30)
+            ax.set_axis_off()
+            return mpld3.fig_to_html(fig)
+
+        except: return "<p>Something has gone terribly wrong</p>"
 
 def display(request):
     state1 = request.GET.get('state1', 'None')

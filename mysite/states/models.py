@@ -53,6 +53,66 @@ STATES = (
     ('WV', 'West Virginia'),
     ('WY', 'Wyoming')
    )
+   
+STATEFP = (
+    ('AL',1),
+    ('AK',2),
+    ('AZ',4),
+    ('AR',5),
+    ('CA',6),
+    ('CO',8),
+    ('CT',9),
+    ('DE',10),
+    ('DC',11),
+    ('FL',12),
+    ('GA',13),
+    ('HI',15),
+    ('ID',16),
+    ('IL',17),
+    ('IN',18),
+    ('IA',19),
+    ('KS',20),
+    ('KY',21),
+    ('LA',22),
+    ('ME',23),
+    ('MD',24),
+    ('MA',25),
+    ('MI',26),
+    ('MN',27),
+    ('MS',28),
+    ('MO',29),
+    ('MT',30),
+    ('NE',31),
+    ('NV',32),
+    ('NH',33),
+    ('NJ',34),
+    ('NM',35),
+    ('NY',36),
+    ('NC',37),
+    ('ND',38),
+    ('OH',39),
+    ('OK',40),
+    ('OR',41),
+    ('PA',42),
+    ('RI',44),
+    ('SC',45),
+    ('SD',46),
+    ('TN',47),
+    ('TX',48),
+    ('UT',49),
+    ('VT',50),
+    ('VA',51),
+    ('WA',53),
+    ('WV',54),
+    ('WI',55),
+    ('WY',56),
+    ('AS',60),
+    ('GU',66),
+    ('MP',69),
+    ('PR',72),
+    ('UM',74),
+    ('VI',78),
+)
 
 YEARS = ( ('2000', '2000'), ('2001', '2001'), ('2002', '2002'), ('2003', '2003'),
         ('2004', '2004'), ('2005', '2005'), ('2006', '2006'), ('2007', '2007'), ('2008', '2008'),
@@ -151,7 +211,8 @@ DATA = (
 DISPLAY_TYPES = ( ('plot', 'plot'),
                     ('corrmatrix', 'corrmatrix'),
                     ('corrplot', 'corrplot'),
-                    ('table', 'table'))
+                    ('table', 'table'),
+                    ('map', 'map'))
 
 INTERSECT_DATA = ( ('True', 'True'),
                     ('False', 'False') )
@@ -162,6 +223,7 @@ YEARS_DICT = dict(YEARS)
 DATA_DICT = dict(DATA)
 ID_DICT = dict(INTERSECT_DATA)
 DT_DICT = dict(DISPLAY_TYPES)
+STATEFP_DICT = dict(STATEFP)
 
 class Input(models.Model):
     state1 = models.CharField(max_length = 50, choices = STATES)
