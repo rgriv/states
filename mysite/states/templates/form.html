@@ -1,0 +1,32 @@
+<style>
+#left {
+  float: left;
+  width: 35%;
+  overflow: hidden;
+  background-color: lightblue;
+  height: 100%
+}
+
+#right {
+  overflow: hidden;
+  background-color: lightyellow;
+  height: 100%;
+  border-style: double;
+  border-color: black;
+}
+</style>
+
+<div id = "wrapper">
+<div id = "left">
+<form action="{{ form_action }}"
+      method="{{ form_method }}">
+  {% if form_method == "post" %}
+    {% csrf_token %}
+  {% endif %}
+  {{ form.as_p }}
+</form>
+</div>
+<div id = "right">
+<a href="{% url 'states:display' %}">Reset Page</a>
+{{plot_source | safe}}
+</div>

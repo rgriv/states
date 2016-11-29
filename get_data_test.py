@@ -111,7 +111,7 @@ def getSpendingStateTypeData(state, data_type):
             except: pass
         year_dict[str(year)] = pd.Series(data_dict)
     df = pd.DataFrame(year_dict).transpose()
-    df.index.name = "Date"
+    df.index.name = "Year"
     return(df)
 
 def getSpendingDataSets(data_type, folder):
@@ -123,7 +123,7 @@ getSpendingDataSets("pn", "Raw Spending/")
 getSpendingDataSets("bn", "Raw Spending/")
 getSpendingDataSets("dn", "Raw Spending/")
 
-def formatSpendingData(folder):
+def formatSpendingData(folder, end_folder):
     spending_types = ["Balance", "Education", "General Government",
                     "Gross Public Debt", "Health Care", "Interest",
                     "Other Borrowing", "Other Spending", "Pensions",
@@ -132,10 +132,10 @@ def formatSpendingData(folder):
         for st in spending_types:
             df_list = []
             for state, name in states.items():
-                df = pd.read_csv("{}{}_{}.csv".format(folder, data_type, state), usecols = ["Date", st], index_col = "Date")
+                df = pd.read_csv("{}{}_{}.csv".format(folder, data_type, state), usecols = ["Year", st], index_col = "Year")
                 df_list.append(df.rename(columns = {st : state}))
-            pd.concat(df_list, axis = 1).to_csv("{}_{}.csv".format(data_type, st))
-formatSpendingData("Raw Spending/")
+            pd.concat(df_list, axis = 1).to_csv("{}{}_{}.csv".format(end_folder, data_type, st))
+formatSpendingData("Raw Spending/", "mysite/static/myapp/")
 
 for db in data_dict:
     for info in data_dict[db]:
