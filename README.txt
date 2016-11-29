@@ -11,7 +11,7 @@ Eventually, we decided to add in other outside sources of information, such as c
 Currently the project exists as a way to compare disparate time-series data sets by being able to plot them over them and compare between states. Additionally it has the functionality to display correlation tables and heat maps.
 
 Functionality:
-Website users can choose up to 8 state and data choices, a start year and end year between 2000-2016, display types, and the choice to join data by union or by intersection. Some data sources, eg. census data, do not exist every year but only in available years. In these cases, intersecting data may be the most useful.
+Website users can choose up to 8 state and data choices, a start year and end year between 2000-2016, display types, and the choice to join data by union or by intersection. Some data sources, eg. census data, do not exist every year but only in available years. In these cases, intersecting data may be the most useful. You can click reset page to reset the page.
 
 Display Types:
 Plot - Plot longitudinal data up to 8 state and data choices.
