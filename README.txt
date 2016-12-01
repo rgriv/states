@@ -8,6 +8,12 @@ In order to run our site you need to have the following installed:
 
 Pandas, geopandas, os, matplotlib, numpy, mpld3 
 
+To run the server, cd into the folder through terminal, cd into mysite then type: python manage.py runserver 
+
+In your browser go to http://127.0.0.1:8000/states/display/ 
+
+Now you can toggle through the different options. 
+
 Project Purpose:
 Our original purpose was to investigate the relationship between household debt (such as student loans and credit cards) and civilian non-aggricultural workforce participation.
 
