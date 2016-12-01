@@ -3,6 +3,11 @@ Amani Abou Harb
 Roman Rivera
 Ryan Tang
 
+
+In order to run our site you need to have the following installed: 
+
+Pandas, geopandas, os, matplotlib, numpy, mpld3 
+
 Project Purpose:
 Our original purpose was to investigate the relationship between household debt (such as student loans and credit cards) and civilian non-aggricultural workforce participation.
 

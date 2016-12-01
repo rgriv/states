@@ -1,0 +1,62 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:600,500,400,300,200,100,400italic0&subset=latin,greek,latin-ext' rel='stylesheet' type='text/css'>
+
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'myapp/style.css' %}" />
+
+    <title>{{ title | default:"My Django Site" }}</title>
+
+    {% block header_ex %}{% endblock %}
+
+</head>
+
+<body>
+
+
+<nav class="navbar navbar-inverse" id="navbar">
+  <div class="col-md-10 col-md-offset-1">
+    <ul class="nav navbar-nav">
+      <li class="active"><a href="#home">Home</a></li>
+      <li><a href="/myapp/heat_map">HeatMap</a></li>
+      <li><a href="/myapp/show_PA_state">PA Election</a></li>
+      <li><a href="/myapp/display_state">StateMap</a></li>
+      <li><a href="/myapp/display_pic">Plot</a></li>
+      <li><a href="/myapp/display_table">Table</a></li>
+      <li><a href="/myapp/smom_folium">SingleMom</a></li>
+      <li><a href="/myapp/smom_map">SingleMom2</a></li>
+      <li><a href="/myapp/population">Population</a></li>
+      <li><a href="/myapp/election/">Static Election</a></li>
+    </ul>
+
+    <form method="{{ form_method }}">
+      {{ form.currency }}
+      {{ form.county }}
+    </form>
+
+  </div>
+</nav>
+
+
+
+<div class="col-md-10 col-md-offset-1 text-left">
+
+  <h1>{{ title | default:"My Django Site" }}</h1>
+
+  <div id="content">
+    {% block content %}{% endblock %}
+  </div>
+
+</div>
+
+</body>
+</html>
+
+
